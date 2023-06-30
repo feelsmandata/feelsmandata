@@ -1,0 +1,931 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/feelsmandata/feelsmandata/blob/main/PySketch%20(Sample%20Data)\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "bMH4LA6_A0Cs",
+        "outputId": "d0d17243-36f4-42ea-d7eb-1dac663b372c"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Collecting sketch\n",
+            "  Downloading sketch-0.4.2-py3-none-any.whl (16 kB)\n",
+            "Requirement already satisfied: pandas>=1.3.0 in /usr/local/lib/python3.10/dist-packages (from sketch) (1.5.3)\n",
+            "Collecting datasketch>=1.5.8 (from sketch)\n",
+            "  Downloading datasketch-1.5.9-py3-none-any.whl (76 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m76.7/76.7 kB\u001b[0m \u001b[31m3.2 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hCollecting datasketches>=4.0.0 (from sketch)\n",
+            "  Downloading datasketches-4.1.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (827 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m827.0/827.0 kB\u001b[0m \u001b[31m18.0 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hRequirement already satisfied: ipython in /usr/local/lib/python3.10/dist-packages (from sketch) (7.34.0)\n",
+            "Collecting lambdaprompt>=0.5.4 (from sketch)\n",
+            "  Downloading lambdaprompt-0.5.5-py3-none-any.whl (14 kB)\n",
+            "Requirement already satisfied: packaging in /usr/local/lib/python3.10/dist-packages (from sketch) (23.1)\n",
+            "Requirement already satisfied: numpy>=1.11 in /usr/local/lib/python3.10/dist-packages (from datasketch>=1.5.8->sketch) (1.22.4)\n",
+            "Requirement already satisfied: scipy>=1.0.0 in /usr/local/lib/python3.10/dist-packages (from datasketch>=1.5.8->sketch) (1.10.1)\n",
+            "Requirement already satisfied: requests in /usr/local/lib/python3.10/dist-packages (from lambdaprompt>=0.5.4->sketch) (2.27.1)\n",
+            "Requirement already satisfied: aiohttp in /usr/local/lib/python3.10/dist-packages (from lambdaprompt>=0.5.4->sketch) (3.8.4)\n",
+            "Collecting python-dotenv (from lambdaprompt>=0.5.4->sketch)\n",
+            "  Downloading python_dotenv-1.0.0-py3-none-any.whl (19 kB)\n",
+            "Requirement already satisfied: jinja2 in /usr/local/lib/python3.10/dist-packages (from lambdaprompt>=0.5.4->sketch) (3.1.2)\n",
+            "Requirement already satisfied: nest-asyncio in /usr/local/lib/python3.10/dist-packages (from lambdaprompt>=0.5.4->sketch) (1.5.6)\n",
+            "Requirement already satisfied: pyyaml in /usr/local/lib/python3.10/dist-packages (from lambdaprompt>=0.5.4->sketch) (6.0)\n",
+            "Requirement already satisfied: tenacity in /usr/local/lib/python3.10/dist-packages (from lambdaprompt>=0.5.4->sketch) (8.2.2)\n",
+            "Requirement already satisfied: pydantic in /usr/local/lib/python3.10/dist-packages (from lambdaprompt>=0.5.4->sketch) (1.10.9)\n",
+            "Requirement already satisfied: python-dateutil>=2.8.1 in /usr/local/lib/python3.10/dist-packages (from pandas>=1.3.0->sketch) (2.8.2)\n",
+            "Requirement already satisfied: pytz>=2020.1 in /usr/local/lib/python3.10/dist-packages (from pandas>=1.3.0->sketch) (2022.7.1)\n",
+            "Requirement already satisfied: setuptools>=18.5 in /usr/local/lib/python3.10/dist-packages (from ipython->sketch) (67.7.2)\n",
+            "Collecting jedi>=0.16 (from ipython->sketch)\n",
+            "  Downloading jedi-0.18.2-py2.py3-none-any.whl (1.6 MB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m1.6/1.6 MB\u001b[0m \u001b[31m62.9 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hRequirement already satisfied: decorator in /usr/local/lib/python3.10/dist-packages (from ipython->sketch) (4.4.2)\n",
+            "Requirement already satisfied: pickleshare in /usr/local/lib/python3.10/dist-packages (from ipython->sketch) (0.7.5)\n",
+            "Requirement already satisfied: traitlets>=4.2 in /usr/local/lib/python3.10/dist-packages (from ipython->sketch) (5.7.1)\n",
+            "Requirement already satisfied: prompt-toolkit!=3.0.0,!=3.0.1,<3.1.0,>=2.0.0 in /usr/local/lib/python3.10/dist-packages (from ipython->sketch) (3.0.38)\n",
+            "Requirement already satisfied: pygments in /usr/local/lib/python3.10/dist-packages (from ipython->sketch) (2.14.0)\n",
+            "Requirement already satisfied: backcall in /usr/local/lib/python3.10/dist-packages (from ipython->sketch) (0.2.0)\n",
+            "Requirement already satisfied: matplotlib-inline in /usr/local/lib/python3.10/dist-packages (from ipython->sketch) (0.1.6)\n",
+            "Requirement already satisfied: pexpect>4.3 in /usr/local/lib/python3.10/dist-packages (from ipython->sketch) (4.8.0)\n",
+            "Requirement already satisfied: parso<0.9.0,>=0.8.0 in /usr/local/lib/python3.10/dist-packages (from jedi>=0.16->ipython->sketch) (0.8.3)\n",
+            "Requirement already satisfied: ptyprocess>=0.5 in /usr/local/lib/python3.10/dist-packages (from pexpect>4.3->ipython->sketch) (0.7.0)\n",
+            "Requirement already satisfied: wcwidth in /usr/local/lib/python3.10/dist-packages (from prompt-toolkit!=3.0.0,!=3.0.1,<3.1.0,>=2.0.0->ipython->sketch) (0.2.6)\n",
+            "Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.10/dist-packages (from python-dateutil>=2.8.1->pandas>=1.3.0->sketch) (1.16.0)\n",
+            "Requirement already satisfied: attrs>=17.3.0 in /usr/local/lib/python3.10/dist-packages (from aiohttp->lambdaprompt>=0.5.4->sketch) (23.1.0)\n",
+            "Requirement already satisfied: charset-normalizer<4.0,>=2.0 in /usr/local/lib/python3.10/dist-packages (from aiohttp->lambdaprompt>=0.5.4->sketch) (2.0.12)\n",
+            "Requirement already satisfied: multidict<7.0,>=4.5 in /usr/local/lib/python3.10/dist-packages (from aiohttp->lambdaprompt>=0.5.4->sketch) (6.0.4)\n",
+            "Requirement already satisfied: async-timeout<5.0,>=4.0.0a3 in /usr/local/lib/python3.10/dist-packages (from aiohttp->lambdaprompt>=0.5.4->sketch) (4.0.2)\n",
+            "Requirement already satisfied: yarl<2.0,>=1.0 in /usr/local/lib/python3.10/dist-packages (from aiohttp->lambdaprompt>=0.5.4->sketch) (1.9.2)\n",
+            "Requirement already satisfied: frozenlist>=1.1.1 in /usr/local/lib/python3.10/dist-packages (from aiohttp->lambdaprompt>=0.5.4->sketch) (1.3.3)\n",
+            "Requirement already satisfied: aiosignal>=1.1.2 in /usr/local/lib/python3.10/dist-packages (from aiohttp->lambdaprompt>=0.5.4->sketch) (1.3.1)\n",
+            "Requirement already satisfied: MarkupSafe>=2.0 in /usr/local/lib/python3.10/dist-packages (from jinja2->lambdaprompt>=0.5.4->sketch) (2.1.3)\n",
+            "Requirement already satisfied: typing-extensions>=4.2.0 in /usr/local/lib/python3.10/dist-packages (from pydantic->lambdaprompt>=0.5.4->sketch) (4.6.3)\n",
+            "Requirement already satisfied: urllib3<1.27,>=1.21.1 in /usr/local/lib/python3.10/dist-packages (from requests->lambdaprompt>=0.5.4->sketch) (1.26.16)\n",
+            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.10/dist-packages (from requests->lambdaprompt>=0.5.4->sketch) (2023.5.7)\n",
+            "Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.10/dist-packages (from requests->lambdaprompt>=0.5.4->sketch) (3.4)\n",
+            "Installing collected packages: python-dotenv, jedi, datasketches, datasketch, lambdaprompt, sketch\n",
+            "Successfully installed datasketch-1.5.9 datasketches-4.1.0 jedi-0.18.2 lambdaprompt-0.5.5 python-dotenv-1.0.0 sketch-0.4.2\n"
+          ]
+        }
+      ],
+      "source": [
+        "pip install sketch"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**START HERE**"
+      ],
+      "metadata": {
+        "id": "s2nCSxx1rtcL"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#import the google drive\n",
+        "from google.colab import drive\n",
+        "drive.mount('/content/drive')"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "4moSsnWYrsaE",
+        "outputId": "3af867da-c574-4cc5-fd7c-1bd6385c64d4"
+      },
+      "execution_count": 2,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Mounted at /content/drive\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#import the python libraries\n",
+        "import pandas as pd\n",
+        "import sketch as skt"
+      ],
+      "metadata": {
+        "id": "Aa7YDrmlr9bV"
+      },
+      "execution_count": 3,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#read the file\n",
+        "path = ('/content/drive/MyDrive/Data Analyst Portfolio/Cookie.csv')\n",
+        "df = pd.read_csv(path)"
+      ],
+      "metadata": {
+        "id": "Ik3kNSdlsWC6"
+      },
+      "execution_count": 4,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#As you can see there are unwanted columns. We need to get rid of that.\n",
+        "df.head()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 206
+        },
+        "id": "HFWaSZSMsgQL",
+        "outputId": "34fd35f1-486e-405d-bc71-b943f7392512"
+      },
+      "execution_count": 22,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "  Country          Product   Units Sold      Revenue         Cost   \\\n",
+              "0   India   Chocolate Chip       1725.0    $8,625.00    $3,450.00    \n",
+              "1   India   Chocolate Chip       2152.0   $10,760.00    $4,304.00    \n",
+              "2   India   Chocolate Chip       2349.0   $11,745.00    $4,698.00    \n",
+              "3   India   Chocolate Chip       1228.0    $6,140.00    $2,456.00    \n",
+              "4   India   Chocolate Chip       1389.0    $6,945.00    $2,778.00    \n",
+              "\n",
+              "       Profit         Date  \n",
+              "0   $5,175.00   01/11/2019  \n",
+              "1   $6,456.00   01/12/2019  \n",
+              "2   $7,047.00   01/09/2019  \n",
+              "3   $3,684.00   01/10/2019  \n",
+              "4   $4,167.00   01/10/2019  "
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-2e606930-a033-45f6-b3ab-30ea661f950a\">\n",
+              "    <div class=\"colab-df-container\">\n",
+              "      <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>Country</th>\n",
+              "      <th>Product</th>\n",
+              "      <th>Units Sold</th>\n",
+              "      <th>Revenue</th>\n",
+              "      <th>Cost</th>\n",
+              "      <th>Profit</th>\n",
+              "      <th>Date</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>India</td>\n",
+              "      <td>Chocolate Chip</td>\n",
+              "      <td>1725.0</td>\n",
+              "      <td>$8,625.00</td>\n",
+              "      <td>$3,450.00</td>\n",
+              "      <td>$5,175.00</td>\n",
+              "      <td>01/11/2019</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>India</td>\n",
+              "      <td>Chocolate Chip</td>\n",
+              "      <td>2152.0</td>\n",
+              "      <td>$10,760.00</td>\n",
+              "      <td>$4,304.00</td>\n",
+              "      <td>$6,456.00</td>\n",
+              "      <td>01/12/2019</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>India</td>\n",
+              "      <td>Chocolate Chip</td>\n",
+              "      <td>2349.0</td>\n",
+              "      <td>$11,745.00</td>\n",
+              "      <td>$4,698.00</td>\n",
+              "      <td>$7,047.00</td>\n",
+              "      <td>01/09/2019</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>India</td>\n",
+              "      <td>Chocolate Chip</td>\n",
+              "      <td>1228.0</td>\n",
+              "      <td>$6,140.00</td>\n",
+              "      <td>$2,456.00</td>\n",
+              "      <td>$3,684.00</td>\n",
+              "      <td>01/10/2019</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>India</td>\n",
+              "      <td>Chocolate Chip</td>\n",
+              "      <td>1389.0</td>\n",
+              "      <td>$6,945.00</td>\n",
+              "      <td>$2,778.00</td>\n",
+              "      <td>$4,167.00</td>\n",
+              "      <td>01/10/2019</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>\n",
+              "      <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-2e606930-a033-45f6-b3ab-30ea661f950a')\"\n",
+              "              title=\"Convert this dataframe to an interactive table.\"\n",
+              "              style=\"display:none;\">\n",
+              "        \n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
+              "       width=\"24px\">\n",
+              "    <path d=\"M0 0h24v24H0V0z\" fill=\"none\"/>\n",
+              "    <path d=\"M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z\"/><path d=\"M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z\"/>\n",
+              "  </svg>\n",
+              "      </button>\n",
+              "      \n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      flex-wrap:wrap;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "      <script>\n",
+              "        const buttonEl =\n",
+              "          document.querySelector('#df-2e606930-a033-45f6-b3ab-30ea661f950a button.colab-df-convert');\n",
+              "        buttonEl.style.display =\n",
+              "          google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "        async function convertToInteractive(key) {\n",
+              "          const element = document.querySelector('#df-2e606930-a033-45f6-b3ab-30ea661f950a');\n",
+              "          const dataTable =\n",
+              "            await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                     [key], {});\n",
+              "          if (!dataTable) return;\n",
+              "\n",
+              "          const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "            '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "            + ' to learn more about interactive tables.';\n",
+              "          element.innerHTML = '';\n",
+              "          dataTable['output_type'] = 'display_data';\n",
+              "          await google.colab.output.renderOutput(dataTable, element);\n",
+              "          const docLink = document.createElement('div');\n",
+              "          docLink.innerHTML = docLinkHtml;\n",
+              "          element.appendChild(docLink);\n",
+              "        }\n",
+              "      </script>\n",
+              "    </div>\n",
+              "  </div>\n",
+              "  "
+            ]
+          },
+          "metadata": {},
+          "execution_count": 22
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#load the columns and re-define the variable.\n",
+        "df.columns"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "juhL9BZZsiAC",
+        "outputId": "de9a00fd-c6bb-4392-e6ef-4db9d8ceddaa"
+      },
+      "execution_count": 23,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Index(['Country', ' Product ', 'Units Sold', ' Revenue ', ' Cost ', ' Profit ',\n",
+              "       'Date'],\n",
+              "      dtype='object')"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 23
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df = df[['Country', ' Product ', 'Units Sold', ' Revenue ', ' Cost ', ' Profit ',\n",
+        "       'Date']]\n",
+        "df"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 424
+        },
+        "id": "BMR7rTX8sk87",
+        "outputId": "7d3e1735-190c-402e-cfc9-b2f9d2557564"
+      },
+      "execution_count": 24,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "            Country                         Product   Units Sold  \\\n",
+              "0             India                  Chocolate Chip       1725.0   \n",
+              "1             India                  Chocolate Chip       2152.0   \n",
+              "2             India                  Chocolate Chip       2349.0   \n",
+              "3             India                  Chocolate Chip       1228.0   \n",
+              "4             India                  Chocolate Chip       1389.0   \n",
+              "...             ...                              ...         ...   \n",
+              "1220  United States   White Chocolate Macadamia Nut       1596.0   \n",
+              "1221  United States   White Chocolate Macadamia Nut        986.0   \n",
+              "1222  United States   White Chocolate Macadamia Nut        606.0   \n",
+              "1223  United States   White Chocolate Macadamia Nut       2460.0   \n",
+              "1224  United States   White Chocolate Macadamia Nut        914.0   \n",
+              "\n",
+              "          Revenue         Cost       Profit         Date  \n",
+              "0       $8,625.00    $3,450.00    $5,175.00   01/11/2019  \n",
+              "1      $10,760.00    $4,304.00    $6,456.00   01/12/2019  \n",
+              "2      $11,745.00    $4,698.00    $7,047.00   01/09/2019  \n",
+              "3       $6,140.00    $2,456.00    $3,684.00   01/10/2019  \n",
+              "4       $6,945.00    $2,778.00    $4,167.00   01/10/2019  \n",
+              "...            ...          ...          ...         ...  \n",
+              "1220    $9,576.00    $4,389.00    $5,187.00     9/1/2020  \n",
+              "1221    $5,916.00    $2,711.50    $3,204.50    10/1/2020  \n",
+              "1222    $3,636.00    $1,666.50    $1,969.50     4/1/2020  \n",
+              "1223   $14,760.00    $6,765.00    $7,995.00     7/1/2020  \n",
+              "1224    $5,484.00    $2,513.50    $2,970.50    12/1/2020  \n",
+              "\n",
+              "[1225 rows x 7 columns]"
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-6801fc5d-aae1-4743-8692-66b032fa0762\">\n",
+              "    <div class=\"colab-df-container\">\n",
+              "      <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>Country</th>\n",
+              "      <th>Product</th>\n",
+              "      <th>Units Sold</th>\n",
+              "      <th>Revenue</th>\n",
+              "      <th>Cost</th>\n",
+              "      <th>Profit</th>\n",
+              "      <th>Date</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>India</td>\n",
+              "      <td>Chocolate Chip</td>\n",
+              "      <td>1725.0</td>\n",
+              "      <td>$8,625.00</td>\n",
+              "      <td>$3,450.00</td>\n",
+              "      <td>$5,175.00</td>\n",
+              "      <td>01/11/2019</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>India</td>\n",
+              "      <td>Chocolate Chip</td>\n",
+              "      <td>2152.0</td>\n",
+              "      <td>$10,760.00</td>\n",
+              "      <td>$4,304.00</td>\n",
+              "      <td>$6,456.00</td>\n",
+              "      <td>01/12/2019</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>India</td>\n",
+              "      <td>Chocolate Chip</td>\n",
+              "      <td>2349.0</td>\n",
+              "      <td>$11,745.00</td>\n",
+              "      <td>$4,698.00</td>\n",
+              "      <td>$7,047.00</td>\n",
+              "      <td>01/09/2019</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>India</td>\n",
+              "      <td>Chocolate Chip</td>\n",
+              "      <td>1228.0</td>\n",
+              "      <td>$6,140.00</td>\n",
+              "      <td>$2,456.00</td>\n",
+              "      <td>$3,684.00</td>\n",
+              "      <td>01/10/2019</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>India</td>\n",
+              "      <td>Chocolate Chip</td>\n",
+              "      <td>1389.0</td>\n",
+              "      <td>$6,945.00</td>\n",
+              "      <td>$2,778.00</td>\n",
+              "      <td>$4,167.00</td>\n",
+              "      <td>01/10/2019</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>...</th>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1220</th>\n",
+              "      <td>United States</td>\n",
+              "      <td>White Chocolate Macadamia Nut</td>\n",
+              "      <td>1596.0</td>\n",
+              "      <td>$9,576.00</td>\n",
+              "      <td>$4,389.00</td>\n",
+              "      <td>$5,187.00</td>\n",
+              "      <td>9/1/2020</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1221</th>\n",
+              "      <td>United States</td>\n",
+              "      <td>White Chocolate Macadamia Nut</td>\n",
+              "      <td>986.0</td>\n",
+              "      <td>$5,916.00</td>\n",
+              "      <td>$2,711.50</td>\n",
+              "      <td>$3,204.50</td>\n",
+              "      <td>10/1/2020</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1222</th>\n",
+              "      <td>United States</td>\n",
+              "      <td>White Chocolate Macadamia Nut</td>\n",
+              "      <td>606.0</td>\n",
+              "      <td>$3,636.00</td>\n",
+              "      <td>$1,666.50</td>\n",
+              "      <td>$1,969.50</td>\n",
+              "      <td>4/1/2020</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1223</th>\n",
+              "      <td>United States</td>\n",
+              "      <td>White Chocolate Macadamia Nut</td>\n",
+              "      <td>2460.0</td>\n",
+              "      <td>$14,760.00</td>\n",
+              "      <td>$6,765.00</td>\n",
+              "      <td>$7,995.00</td>\n",
+              "      <td>7/1/2020</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1224</th>\n",
+              "      <td>United States</td>\n",
+              "      <td>White Chocolate Macadamia Nut</td>\n",
+              "      <td>914.0</td>\n",
+              "      <td>$5,484.00</td>\n",
+              "      <td>$2,513.50</td>\n",
+              "      <td>$2,970.50</td>\n",
+              "      <td>12/1/2020</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "<p>1225 rows × 7 columns</p>\n",
+              "</div>\n",
+              "      <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-6801fc5d-aae1-4743-8692-66b032fa0762')\"\n",
+              "              title=\"Convert this dataframe to an interactive table.\"\n",
+              "              style=\"display:none;\">\n",
+              "        \n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
+              "       width=\"24px\">\n",
+              "    <path d=\"M0 0h24v24H0V0z\" fill=\"none\"/>\n",
+              "    <path d=\"M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z\"/><path d=\"M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z\"/>\n",
+              "  </svg>\n",
+              "      </button>\n",
+              "      \n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      flex-wrap:wrap;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "      <script>\n",
+              "        const buttonEl =\n",
+              "          document.querySelector('#df-6801fc5d-aae1-4743-8692-66b032fa0762 button.colab-df-convert');\n",
+              "        buttonEl.style.display =\n",
+              "          google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "        async function convertToInteractive(key) {\n",
+              "          const element = document.querySelector('#df-6801fc5d-aae1-4743-8692-66b032fa0762');\n",
+              "          const dataTable =\n",
+              "            await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                     [key], {});\n",
+              "          if (!dataTable) return;\n",
+              "\n",
+              "          const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "            '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "            + ' to learn more about interactive tables.';\n",
+              "          element.innerHTML = '';\n",
+              "          dataTable['output_type'] = 'display_data';\n",
+              "          await google.colab.output.renderOutput(dataTable, element);\n",
+              "          const docLink = document.createElement('div');\n",
+              "          docLink.innerHTML = docLinkHtml;\n",
+              "          element.appendChild(docLink);\n",
+              "        }\n",
+              "      </script>\n",
+              "    </div>\n",
+              "  </div>\n",
+              "  "
+            ]
+          },
+          "metadata": {},
+          "execution_count": 24
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df = df.dropna()"
+      ],
+      "metadata": {
+        "id": "Jp0OsybRssCK"
+      },
+      "execution_count": 25,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#There is no duplicated dataset.\n",
+        "df.duplicated().sum()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "HxcHGYzas7tC",
+        "outputId": "909bc3f3-7876-4fe5-bf1b-1b282e4ff6a1"
+      },
+      "execution_count": 27,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 27
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Start using the imported sketch lib\n",
+        "df.sketch.ask(\"How many columns are there?\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 34
+        },
+        "id": "7cf-yP8EtHBT",
+        "outputId": "66638ecc-5299-4e65-98bf-4ea0381a771c"
+      },
+      "execution_count": 28,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<IPython.core.display.HTML object>"
+            ],
+            "text/html": [
+              "\n",
+              "There are 8 columns in the dataframe.\n"
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.sketch.ask(\"Using our dataset. what kind of analysis could we perform?\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 52
+        },
+        "id": "SfLDTc2IvLfL",
+        "outputId": "e63435c7-f7ba-4d15-c7af-fcf2e81a4069"
+      },
+      "execution_count": 30,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<IPython.core.display.HTML object>"
+            ],
+            "text/html": [
+              "\n",
+              "We could perform a variety of analyses with this dataset, including descriptive statistics, correlation analysis, and predictive modeling. We could also use the data to explore trends in sales, revenue, cost, and profit over time. Additionally, we could use the data to compare sales performance across different countries and products."
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.sketch.howto(\"What country has the highest sales?\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 121
+        },
+        "id": "n_VJXsEHvUfE",
+        "outputId": "30e1b133-f13b-418a-9be9-160e0155e9b7"
+      },
+      "execution_count": 32,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<IPython.core.display.HTML object>"
+            ],
+            "text/html": [
+              "<div style=\"display:flex;flex-direction:row;justify-content:space-between;\">\n",
+              "                <pre style=\"width: 100%; white-space: pre-wrap;\" id=\"4b5ca3a6-b77a-4dec-a70a-dfe0ce914ed0\">\n",
+              "# Get the country with the highest sales\n",
+              "country_sales = df.groupby('Country')['Units Sold'].sum().reset_index()\n",
+              "max_sales_country = country_sales.loc[country_sales['Units Sold'].idxmax()]['Country']\n",
+              "\n",
+              "# Print the result\n",
+              "print('The country with the highest sales is: {}'.format(max_sales_country))\n",
+              "</pre>\n",
+              "                <button style=\"height: fit-content;\" onclick=\"navigator.clipboard.writeText(JSON.parse(atob(`IlxuIyBHZXQgdGhlIGNvdW50cnkgd2l0aCB0aGUgaGlnaGVzdCBzYWxlc1xuY291bnRyeV9zYWxlcyA9IGRmLmdyb3VwYnkoJ0NvdW50cnknKVsnVW5pdHMgU29sZCddLnN1bSgpLnJlc2V0X2luZGV4KClcbm1heF9zYWxlc19jb3VudHJ5ID0gY291bnRyeV9zYWxlcy5sb2NbY291bnRyeV9zYWxlc1snVW5pdHMgU29sZCddLmlkeG1heCgpXVsnQ291bnRyeSddXG5cbiMgUHJpbnQgdGhlIHJlc3VsdFxucHJpbnQoJ1RoZSBjb3VudHJ5IHdpdGggdGhlIGhpZ2hlc3Qgc2FsZXMgaXM6IHt9Jy5mb3JtYXQobWF4X3NhbGVzX2NvdW50cnkpKVxuIg==`)))\">Copy</button>\n",
+              "                </div>"
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Get the country with the highest sales\n",
+        "country_sales = df.groupby('Country')['Units Sold'].sum().reset_index()\n",
+        "max_sales_country = country_sales.loc[country_sales['Units Sold'].idxmax()]['Country']\n",
+        "\n",
+        "# Print the result\n",
+        "print('The country with the highest sales is: {}'.format(max_sales_country))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Nxu9TQEmvwEe",
+        "outputId": "ea05e51b-94b1-4123-8d00-ea11ecb4871e"
+      },
+      "execution_count": 33,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "The country with the highest sales is: India\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.sketch.howto(\"How to plot the highest sale?\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 191
+        },
+        "id": "V35eZDsYwF8L",
+        "outputId": "f90f461c-b3be-45a1-e205-aad915a76490"
+      },
+      "execution_count": 35,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<IPython.core.display.HTML object>"
+            ],
+            "text/html": [
+              "<div style=\"display:flex;flex-direction:row;justify-content:space-between;\">\n",
+              "                <pre style=\"width: 100%; white-space: pre-wrap;\" id=\"fedd4f5e-7031-410a-add1-bc1c3516475a\">\n",
+              "# Get the data for the highest sale\n",
+              "highest_sale = df.sort_values(by='Units Sold', ascending=False).head(1)\n",
+              "\n",
+              "# Plot the highest sale\n",
+              "import matplotlib.pyplot as plt\n",
+              "plt.bar(highest_sale['Country'], highest_sale['Units Sold'])\n",
+              "plt.title('Highest Sale')\n",
+              "plt.xlabel('Country')\n",
+              "plt.ylabel('Units Sold')\n",
+              "plt.show()\n",
+              "</pre>\n",
+              "                <button style=\"height: fit-content;\" onclick=\"navigator.clipboard.writeText(JSON.parse(atob(`IlxuIyBHZXQgdGhlIGRhdGEgZm9yIHRoZSBoaWdoZXN0IHNhbGVcbmhpZ2hlc3Rfc2FsZSA9IGRmLnNvcnRfdmFsdWVzKGJ5PSdVbml0cyBTb2xkJywgYXNjZW5kaW5nPUZhbHNlKS5oZWFkKDEpXG5cbiMgUGxvdCB0aGUgaGlnaGVzdCBzYWxlXG5pbXBvcnQgbWF0cGxvdGxpYi5weXBsb3QgYXMgcGx0XG5wbHQuYmFyKGhpZ2hlc3Rfc2FsZVsnQ291bnRyeSddLCBoaWdoZXN0X3NhbGVbJ1VuaXRzIFNvbGQnXSlcbnBsdC50aXRsZSgnSGlnaGVzdCBTYWxlJylcbnBsdC54bGFiZWwoJ0NvdW50cnknKVxucGx0LnlsYWJlbCgnVW5pdHMgU29sZCcpXG5wbHQuc2hvdygpXG4i`)))\">Copy</button>\n",
+              "                </div>"
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Get the data for the highest sale\n",
+        "highest_sale = df.sort_values(by='Units Sold', ascending=False).head(1)\n",
+        "\n",
+        "# Plot the highest sale\n",
+        "import matplotlib.pyplot as plt\n",
+        "plt.bar(highest_sale['Country'], highest_sale['Units Sold'])\n",
+        "plt.title('Highest Sale')\n",
+        "plt.xlabel('Country')\n",
+        "plt.ylabel('Units Sold')\n",
+        "plt.show()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 472
+        },
+        "id": "SzUNY8yKwNaE",
+        "outputId": "65076548-14b2-420c-a306-0806da9338a7"
+      },
+      "execution_count": 38,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/plain": [
+              "<Figure size 640x480 with 1 Axes>"
+            ],
+            "image/png": "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rCyNGzdOvr6+qly5sipXriw/Pz+NHz9eWVlZebFGAACAPOXyp8xefvllzZ49W2+88Ybuu+8+SdLGjRs1ZswYXbp0Sa+99lquLxIAACAvuRxEc+bM0axZs/Tggw86xurWrat//etfevbZZwkiAABw23H5LbMzZ86oRo0a2cZr1KihM2fO5MqiAAAA8pPLQVSvXj1NmzYt2/i0adNUr169XFkUAABAfnL5LbNJkyYpIiJC3333nUJDQyVJ8fHxOnr0qL755ptcXyAAAEBec/kKUYsWLXTgwAE99NBDSklJUUpKirp06aL9+/erWbNmebFGAACAPHVLf8usQoUK3DwNAADuGDm+QnTq1Cn9/vvvTmO7d+/W448/rkceeUTz5s3L9cUBAADkhxwH0YABAzR16lTHdnJyspo1a6Zt27YpPT1dvXv31ieffJIniwQAAMhLOQ6i77//3um7h+bOnatSpUopISFBS5Ys0euvv67p06fnySIBAADyUo6DKDExUUFBQY7t1atXq0uXLipS5K/bkB588EEdPHgw1xcIAACQ13IcRHa7XSkpKY7trVu36p577nFs22w2paen5+riAAAA8kOOg6hp06aaOnWqsrKytHjxYp07d06tW7d27D9w4IACAwPzZJEAAAB5Kccfux8/frzatGmjTz/9VFeuXNFLL72kkiVLOvbPnz9fLVq0yJNFAgAA5KUcB1HdunW1d+9ebdq0SQEBAU5vl0lS9+7dFRISkusLBAAAyGsufTFjmTJl1KlTp+vui4iIyJUFAQAA5DeX/3QHAADAnYYgAgAAxiOIAACA8QgiAABgPJeDaMeOHdq1a5dje8mSJercubNeeuklZWRk5OriAAAA8oPLQfT000/rwIEDkqTffvtN3bt3V7FixbRo0SINGzYs1xcIAACQ11wOogMHDqh+/fqSpEWLFql58+aaN2+eYmJi9Pnnn+f2+gAAAPKcy0FkWZaysrIkSd99950eeOABSVJgYKBOnTqVu6sDAADIBy4HUaNGjfTqq6/qk08+0bp16xxfyHjo0CH5+/vn+gIBAADymstBNHnyZO3YsUP9+/fXyy+/rODgYEnS4sWLde+99+b6AgEAAPKaS3+6Q5Lq1avn9Cmzq958800VKeLy4QAAANzO5StEVatW1enTp7ONX7p0SdWqVcuVRQEAAOQnl4Po8OHDyszM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\n"
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "3ZmrEJ8cwgJ8"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ],
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyNRv1uFrc0cvKWefBjhk2LY",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "display_name": "Python 3",
+      "name": "python3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
