@@ -1,8 +1,7 @@
 - 👋 Hi, I’m @feelsmandata from Philippines.
-- 👀 I’m interested in Data Analytics or Data Science(GIS Analyst) 
-- 🌱 I’m currently learning Python and Spatial Databases  
+- 👀 Currently, working as GIS Data Specialist
+- 🌱 I’m currently learning and upskilling Python and Spatial Databases  
 - 💞️ I’m looking to collaborate on Data Analytics 
-- 📫 How to reach me ...
 
 <!---
 feelsmandata/feelsmandata is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
