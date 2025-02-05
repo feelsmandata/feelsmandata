@@ -1,10 +1,11 @@
 My Portfolio 🚀
-Welcome to my portfolio website! 👋 This is where I showcase my projects and journey as I grow in the fields of Data Analytics, Data Engineering, and Web Development. I’m constantly learning and upskilling in Python, Spatial Data, Databases, and more to build powerful, data-driven solutions.
+
+Welcome to my portfolio website! 👋 This is where I showcase my projects and journey as I grow in the fields of Data Analytics, Data Engineering. I’m constantly learning and upskilling in Python, Spatial Data, Databases, and more to build powerful, data-driven solutions.
 
 🌟 What You’ll Find Here
 Projects: A collection of my key projects, from data analysi=.
 Skills: Technologies and tools I’m proficient in, including Python, PostgreSQL, and geospatial analysis with OSMNx.
-Blog (Coming Soon): I’ll share insights on my learning journey and solutions to challenges I’ve faced.
+
 
 Contact Me: Let’s collaborate or connect professionally!
 🛠️ Current Focus
